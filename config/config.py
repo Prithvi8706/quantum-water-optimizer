@@ -1,0 +1,15 @@
+# Water level thresholds (%)
+LOW_LEVEL_THRESHOLD = 30
+MEDIUM_LEVEL_THRESHOLD = 70
+
+# TDS thresholds (ppm)
+SOFT_TDS_MAX = 120
+SOFTENED_TDS_MAX = 200
+MODERATE_TDS_MAX = 300
+
+# pH thresholds
+PH_ACIDIC_MAX = 6.5
+PH_ALKALINE_MIN = 7.5
+
+# Turbidity thresholds (NTU)
+CLEAR_TURBIDITY_MAX = 5
