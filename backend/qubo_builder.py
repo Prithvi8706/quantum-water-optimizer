@@ -74,4 +74,4 @@ def build_qubo(state):
         linear, quadratic, offset=PENALTY, vartype=dimod.BINARY
     )
 
-    return raw_costs, bqm  # returns BOTH
+    return raw_costs, norm_costs, bqm  

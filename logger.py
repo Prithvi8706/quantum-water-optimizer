@@ -20,6 +20,9 @@ HEADERS = [
     "ph_state",
     "turbidity_state",
     "time_of_day",
+    "cost_pump_off",       # ← added
+    "cost_pump_on",        # ← added
+    "cost_pump_softener",  # ← added
     "action",
     "optimal_cost",
     "pump",
@@ -29,10 +32,6 @@ HEADERS = [
 
 
 def init_log():
-    """
-    Creates the CSV file with headers if it doesn't exist yet.
-    If it already exists, appends to it.
-    """
     file_exists = os.path.isfile(LOG_FILE)
     if not file_exists:
         with open(LOG_FILE, mode="w", newline="") as f:
@@ -44,16 +43,14 @@ def init_log():
 
 
 def log_decision(
-    tank_id:  int,
-    data:     dict,
-    state:    dict,
-    action:   str,
-    cost:     float,
-    hardware: dict,
+    tank_id:   int,
+    data:      dict,
+    state:     dict,
+    raw_costs: dict,  # ← added
+    action:    str,
+    cost:      float,
+    hardware:  dict,
 ):
-    """
-    Writes one decision cycle as a row in the CSV.
-    """
     row = {
         "timestamp":            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "tank_id":              tank_id,
@@ -69,6 +66,9 @@ def log_decision(
         "ph_state":             state["ph_state"],
         "turbidity_state":      state["turbidity_state"],
         "time_of_day":          state["time_of_day"],
+        "cost_pump_off":        raw_costs["pump_off"],        # ← added
+        "cost_pump_on":         raw_costs["pump_on"],         # ← added
+        "cost_pump_softener":   raw_costs["pump_softener"],   # ← added
         "action":               action,
         "optimal_cost":         cost,
         "pump":                 hardware["pump"],

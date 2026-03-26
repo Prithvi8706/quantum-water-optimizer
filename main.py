@@ -10,9 +10,9 @@ from backend.quantum_solver import solve_qubo
 from decision_translator import translate_decision
 from logger import init_log, log_decision
 
-SOLVER_METHOD   = "sa"    # "sa" | "greedy"
+SOLVER_METHOD   = "sa"
 DEMO_TANK_COUNT = 3
-SIMULATION_RUNS = 10      # how many times to loop and generate data
+SIMULATION_RUNS = 10
 
 
 def print_divider(title=""):
@@ -35,12 +35,21 @@ def run_single_tank(tank_id, data, log=True):
     for k, v in state.items():
         print(f"    {k:<26}: {v}")
 
-    costs, bqm = build_qubo(state)
-    print("\n  QUBO Cost Model:")
-    for k, v in costs.items():
+    # ── CHANGED: unpack all three values ──
+    raw_costs, norm_costs, bqm = build_qubo(state)
+
+    # print raw costs (real interpretable values)
+    print("\n  QUBO Cost Model (raw):")
+    for k, v in raw_costs.items():
         print(f"    {k:<26}: {v}")
 
-    action, cost = solve_qubo(costs, bqm=bqm, method=SOLVER_METHOD)
+    # print normalised costs (what solver sees)
+    print("\n  QUBO Cost Model (normalised):")
+    for k, v in norm_costs.items():
+        print(f"    {k:<26}: {v}")
+
+    # ── CHANGED: solver uses norm_costs ──
+    action, cost = solve_qubo(norm_costs, bqm=bqm, method=SOLVER_METHOD)
     print(f"\n  Optimal Action  : {action}")
     print(f"  Optimal Cost    : {cost}")
 
@@ -49,9 +58,9 @@ def run_single_tank(tank_id, data, log=True):
     for k, v in hardware.items():
         print(f"    {k:<26}: {v}")
 
-    # log to CSV
+    # ── CHANGED: log raw_costs so CSV shows real values ──
     if log:
-        log_decision(tank_id, data, state, action, cost, hardware)
+        log_decision(tank_id, data, state, raw_costs, action, cost, hardware)
         print(f"  [Logger] Decision logged.")
 
     return action
@@ -64,7 +73,6 @@ def main():
     print(f"  Simulation Runs: {SIMULATION_RUNS}")
     print("=" * 52)
 
-    # initialise log file
     init_log()
 
     for run in range(1, SIMULATION_RUNS + 1):
@@ -72,7 +80,6 @@ def main():
         print(f"  RUN {run} of {SIMULATION_RUNS}")
         print(f"{'='*52}")
 
-        # Multi-tank simulation
         multi_data     = generate_multi_tank_data(DEMO_TANK_COUNT)
         action_summary = {}
 
