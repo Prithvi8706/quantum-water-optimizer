@@ -20,9 +20,9 @@ HEADERS = [
     "ph_state",
     "turbidity_state",
     "time_of_day",
-    "cost_pump_off",       # ← added
-    "cost_pump_on",        # ← added
-    "cost_pump_softener",  # ← added
+    "cost_pump_off",
+    "cost_pump_on",
+    "cost_pump_softener",
     "action",
     "optimal_cost",
     "pump",
@@ -32,21 +32,17 @@ HEADERS = [
 
 
 def init_log():
-    file_exists = os.path.isfile(LOG_FILE)
-    if not file_exists:
-        with open(LOG_FILE, mode="w", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=HEADERS)
-            writer.writeheader()
-        print(f"[Logger] Created new log file: {LOG_FILE}")
-    else:
-        print(f"[Logger] Appending to existing log file: {LOG_FILE}")
+    with open(LOG_FILE, mode="w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=HEADERS)
+        writer.writeheader()
+    print(f"[Logger] Log file reset: {LOG_FILE}")
 
 
 def log_decision(
     tank_id:   int,
     data:      dict,
     state:     dict,
-    raw_costs: dict,  # ← added
+    raw_costs: dict,
     action:    str,
     cost:      float,
     hardware:  dict,
@@ -66,9 +62,9 @@ def log_decision(
         "ph_state":             state["ph_state"],
         "turbidity_state":      state["turbidity_state"],
         "time_of_day":          state["time_of_day"],
-        "cost_pump_off":        raw_costs["pump_off"],        # ← added
-        "cost_pump_on":         raw_costs["pump_on"],         # ← added
-        "cost_pump_softener":   raw_costs["pump_softener"],   # ← added
+        "cost_pump_off":        raw_costs["pump_off"],
+        "cost_pump_on":         raw_costs["pump_on"],
+        "cost_pump_softener":   raw_costs["pump_softener"],
         "action":               action,
         "optimal_cost":         cost,
         "pump":                 hardware["pump"],

@@ -12,9 +12,9 @@ def generate_fake_data(hour: int = None) -> dict:
 
     data = {
         "water_level_percent": random.randint(10, 95),
-        "tds_ppm":             random.randint(100, 600),
-        "ph":                  round(random.uniform(5.5, 9.0), 2),
-        "turbidity":           random.randint(1, 50),
+        "tds_ppm":             random.randint(30, 2000),
+        "ph":                  round(random.uniform(4.0, 9.0), 2),
+        "turbidity":           random.randint(5, 50),
         "tank_count":          random.randint(1, 5),
         "locality":            random.choice(
                                    ["house", "complex", "college", "urban"]

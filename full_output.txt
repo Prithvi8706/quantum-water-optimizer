@@ -1,0 +1,1294 @@
+====================================================
+  QUANTUM-INSPIRED SMART WATER SYSTEM
+  Solver        : SA
+  Simulation Runs: 10
+====================================================
+[Logger] Log file reset: water_optimizer_log.csv
+
+DEBUG: Log initialised fresh.
+DEBUG: Starting loop -> runs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+DEBUG: Entering run 1
+
+====================================================
+  RUN 1 of 10
+====================================================
+
+──── TANK 1 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 47
+    tds_ppm                   : 323
+    ph                        : 6.59
+    turbidity                 : 13
+    tank_count                : 4
+    locality                  : house
+    hour                      : 17
+
+  Parsed State:
+    availability              : medium
+    softness                  : hard
+    ph_state                  : neutral
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 4
+    locality                  : house
+
+  QUBO Cost Model (raw):
+    pump_off                  : 10.8
+    pump_on                   : 25.56
+    pump_softener             : -1.44
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 12.24
+    pump_on                   : 27.0
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 2 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 15
+    tds_ppm                   : 102
+    ph                        : 8.54
+    turbidity                 : 25
+    tank_count                : 4
+    locality                  : complex
+    hour                      : 17
+
+  Parsed State:
+    availability              : low
+    softness                  : soft
+    ph_state                  : alkaline
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 4
+    locality                  : complex
+
+  QUBO Cost Model (raw):
+    pump_off                  : 37.44
+    pump_on                   : 12.168
+    pump_softener             : 14.508
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 25.272
+    pump_on                   : 0.0
+    pump_softener             : 2.34
+
+  Optimal Action  : pump_on
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : OFF
+    valve                     : BYPASS
+    lcd_msg                   : Pumping Normal
+  [Logger] Decision logged.
+
+──── TANK 3 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 95
+    tds_ppm                   : 246
+    ph                        : 7.1
+    turbidity                 : 50
+    tank_count                : 4
+    locality                  : urban
+    hour                      : 17
+
+  Parsed State:
+    availability              : high
+    softness                  : moderate
+    ph_state                  : neutral
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 4
+    locality                  : urban
+
+  QUBO Cost Model (raw):
+    pump_off                  : 14.4
+    pump_on                   : 51.12
+    pump_softener             : 11.52
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 2.88
+    pump_on                   : 39.6
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── RUN SUMMARY ───────────────────────────────────
+  Tank 1    : pump_softener
+  Tank 2    : pump_on
+  Tank 3    : pump_softener
+
+DEBUG: Entering run 2
+
+====================================================
+  RUN 2 of 10
+====================================================
+
+──── TANK 1 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 81
+    tds_ppm                   : 403
+    ph                        : 7.25
+    turbidity                 : 36
+    tank_count                : 4
+    locality                  : complex
+    hour                      : 17
+
+  Parsed State:
+    availability              : high
+    softness                  : hard
+    ph_state                  : neutral
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 4
+    locality                  : complex
+
+  QUBO Cost Model (raw):
+    pump_off                  : 9.36
+    pump_on                   : 44.928
+    pump_softener             : -1.872
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 11.232
+    pump_on                   : 46.8
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : -0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 2 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 13
+    tds_ppm                   : 336
+    ph                        : 8.92
+    turbidity                 : 30
+    tank_count                : 4
+    locality                  : complex
+    hour                      : 17
+
+  Parsed State:
+    availability              : low
+    softness                  : hard
+    ph_state                  : alkaline
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 4
+    locality                  : complex
+
+  QUBO Cost Model (raw):
+    pump_off                  : 37.44
+    pump_on                   : 30.888
+    pump_softener             : 0.468
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 36.972
+    pump_on                   : 30.42
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : -0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 3 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 12
+    tds_ppm                   : 331
+    ph                        : 5.92
+    turbidity                 : 16
+    tank_count                : 5
+    locality                  : house
+    hour                      : 17
+
+  Parsed State:
+    availability              : low
+    softness                  : hard
+    ph_state                  : acidic
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 5
+    locality                  : house
+
+  QUBO Cost Model (raw):
+    pump_off                  : 32.0
+    pump_on                   : 28.4
+    pump_softener             : 2.4
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 29.6
+    pump_on                   : 26.0
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── RUN SUMMARY ───────────────────────────────────
+  Tank 1    : pump_softener
+  Tank 2    : pump_softener
+  Tank 3    : pump_softener
+
+DEBUG: Entering run 3
+
+====================================================
+  RUN 3 of 10
+====================================================
+
+──── TANK 1 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 85
+    tds_ppm                   : 371
+    ph                        : 7.59
+    turbidity                 : 45
+    tank_count                : 2
+    locality                  : house
+    hour                      : 17
+
+  Parsed State:
+    availability              : high
+    softness                  : hard
+    ph_state                  : alkaline
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 2
+    locality                  : house
+
+  QUBO Cost Model (raw):
+    pump_off                  : 4.8
+    pump_on                   : 25.44
+    pump_softener             : 0.24
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 4.56
+    pump_on                   : 25.2
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 2 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 68
+    tds_ppm                   : 408
+    ph                        : 6.0
+    turbidity                 : 30
+    tank_count                : 2
+    locality                  : college
+    hour                      : 17
+
+  Parsed State:
+    availability              : medium
+    softness                  : hard
+    ph_state                  : acidic
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 2
+    locality                  : college
+
+  QUBO Cost Model (raw):
+    pump_off                  : 12.24
+    pump_on                   : 35.088
+    pump_softener             : 2.448
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 9.792
+    pump_on                   : 32.64
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 3 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 39
+    tds_ppm                   : 535
+    ph                        : 6.1
+    turbidity                 : 27
+    tank_count                : 4
+    locality                  : complex
+    hour                      : 17
+
+  Parsed State:
+    availability              : medium
+    softness                  : hard
+    ph_state                  : acidic
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 4
+    locality                  : complex
+
+  QUBO Cost Model (raw):
+    pump_off                  : 14.04
+    pump_on                   : 40.248
+    pump_softener             : 2.808
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 11.232
+    pump_on                   : 37.44
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── RUN SUMMARY ───────────────────────────────────
+  Tank 1    : pump_softener
+  Tank 2    : pump_softener
+  Tank 3    : pump_softener
+
+DEBUG: Entering run 4
+
+====================================================
+  RUN 4 of 10
+====================================================
+
+──── TANK 1 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 21
+    tds_ppm                   : 568
+    ph                        : 7.27
+    turbidity                 : 32
+    tank_count                : 3
+    locality                  : house
+    hour                      : 17
+
+  Parsed State:
+    availability              : low
+    softness                  : hard
+    ph_state                  : neutral
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 3
+    locality                  : house
+
+  QUBO Cost Model (raw):
+    pump_off                  : 24.0
+    pump_on                   : 16.8
+    pump_softener             : -1.2
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 25.2
+    pump_on                   : 18.0
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 2 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 35
+    tds_ppm                   : 433
+    ph                        : 5.89
+    turbidity                 : 41
+    tank_count                : 4
+    locality                  : house
+    hour                      : 17
+
+  Parsed State:
+    availability              : medium
+    softness                  : hard
+    ph_state                  : acidic
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 4
+    locality                  : house
+
+  QUBO Cost Model (raw):
+    pump_off                  : 10.8
+    pump_on                   : 30.96
+    pump_softener             : 2.16
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 8.64
+    pump_on                   : 28.8
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 3 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 72
+    tds_ppm                   : 494
+    ph                        : 7.37
+    turbidity                 : 16
+    tank_count                : 5
+    locality                  : complex
+    hour                      : 17
+
+  Parsed State:
+    availability              : high
+    softness                  : hard
+    ph_state                  : neutral
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 5
+    locality                  : complex
+
+  QUBO Cost Model (raw):
+    pump_off                  : 10.4
+    pump_on                   : 49.92
+    pump_softener             : -2.08
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 12.48
+    pump_on                   : 52.0
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── RUN SUMMARY ───────────────────────────────────
+  Tank 1    : pump_softener
+  Tank 2    : pump_softener
+  Tank 3    : pump_softener
+
+DEBUG: Entering run 5
+
+====================================================
+  RUN 5 of 10
+====================================================
+
+──── TANK 1 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 65
+    tds_ppm                   : 398
+    ph                        : 5.71
+    turbidity                 : 14
+    tank_count                : 5
+    locality                  : college
+    hour                      : 17
+
+  Parsed State:
+    availability              : medium
+    softness                  : hard
+    ph_state                  : acidic
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 5
+    locality                  : college
+
+  QUBO Cost Model (raw):
+    pump_off                  : 20.4
+    pump_on                   : 58.48
+    pump_softener             : 4.08
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 16.32
+    pump_on                   : 54.4
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 2 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 63
+    tds_ppm                   : 435
+    ph                        : 7.75
+    turbidity                 : 3
+    tank_count                : 5
+    locality                  : urban
+    hour                      : 17
+
+  Parsed State:
+    availability              : medium
+    softness                  : hard
+    ph_state                  : alkaline
+    turbidity_state           : clear
+    time_of_day               : normal
+    tank_count                : 5
+    locality                  : urban
+
+  QUBO Cost Model (raw):
+    pump_off                  : 24.0
+    pump_on                   : 48.8
+    pump_softener             : -7.2
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 31.2
+    pump_on                   : 56.0
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 3 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 87
+    tds_ppm                   : 409
+    ph                        : 7.77
+    turbidity                 : 38
+    tank_count                : 5
+    locality                  : urban
+    hour                      : 17
+
+  Parsed State:
+    availability              : high
+    softness                  : hard
+    ph_state                  : alkaline
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 5
+    locality                  : urban
+
+  QUBO Cost Model (raw):
+    pump_off                  : 16.0
+    pump_on                   : 84.8
+    pump_softener             : 0.8
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 15.2
+    pump_on                   : 84.0
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── RUN SUMMARY ───────────────────────────────────
+  Tank 1    : pump_softener
+  Tank 2    : pump_softener
+  Tank 3    : pump_softener
+
+DEBUG: Entering run 6
+
+====================================================
+  RUN 6 of 10
+====================================================
+
+──── TANK 1 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 77
+    tds_ppm                   : 330
+    ph                        : 7.43
+    turbidity                 : 36
+    tank_count                : 3
+    locality                  : house
+    hour                      : 17
+
+  Parsed State:
+    availability              : high
+    softness                  : hard
+    ph_state                  : neutral
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 3
+    locality                  : house
+
+  QUBO Cost Model (raw):
+    pump_off                  : 6.0
+    pump_on                   : 28.8
+    pump_softener             : -1.2
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 7.2
+    pump_on                   : 30.0
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 2 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 11
+    tds_ppm                   : 432
+    ph                        : 7.77
+    turbidity                 : 6
+    tank_count                : 4
+    locality                  : house
+    hour                      : 17
+
+  Parsed State:
+    availability              : low
+    softness                  : hard
+    ph_state                  : alkaline
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 4
+    locality                  : house
+
+  QUBO Cost Model (raw):
+    pump_off                  : 28.8
+    pump_on                   : 23.76
+    pump_softener             : 0.36
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 28.44
+    pump_on                   : 23.4
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : -0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 3 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 53
+    tds_ppm                   : 575
+    ph                        : 5.54
+    turbidity                 : 40
+    tank_count                : 2
+    locality                  : urban
+    hour                      : 17
+
+  Parsed State:
+    availability              : medium
+    softness                  : hard
+    ph_state                  : acidic
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 2
+    locality                  : urban
+
+  QUBO Cost Model (raw):
+    pump_off                  : 14.4
+    pump_on                   : 41.28
+    pump_softener             : 2.88
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 11.52
+    pump_on                   : 38.4
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── RUN SUMMARY ───────────────────────────────────
+  Tank 1    : pump_softener
+  Tank 2    : pump_softener
+  Tank 3    : pump_softener
+
+DEBUG: Entering run 7
+
+====================================================
+  RUN 7 of 10
+====================================================
+
+──── TANK 1 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 60
+    tds_ppm                   : 105
+    ph                        : 7.62
+    turbidity                 : 38
+    tank_count                : 4
+    locality                  : complex
+    hour                      : 17
+
+  Parsed State:
+    availability              : medium
+    softness                  : soft
+    ph_state                  : alkaline
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 4
+    locality                  : complex
+
+  QUBO Cost Model (raw):
+    pump_off                  : 14.04
+    pump_on                   : 19.188
+    pump_softener             : 14.508
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 0.0
+    pump_on                   : 5.148
+    pump_softener             : 0.468
+
+  Optimal Action  : pump_off
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : OFF
+    softener                  : OFF
+    valve                     : BYPASS
+    lcd_msg                   : Pump OFF
+  [Logger] Decision logged.
+
+──── TANK 2 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 27
+    tds_ppm                   : 210
+    ph                        : 8.55
+    turbidity                 : 20
+    tank_count                : 5
+    locality                  : urban
+    hour                      : 17
+
+  Parsed State:
+    availability              : low
+    softness                  : moderate
+    ph_state                  : alkaline
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 5
+    locality                  : urban
+
+  QUBO Cost Model (raw):
+    pump_off                  : 64.0
+    pump_on                   : 32.8
+    pump_softener             : 16.8
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 47.2
+    pump_on                   : 16.0
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 3 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 31
+    tds_ppm                   : 499
+    ph                        : 5.56
+    turbidity                 : 11
+    tank_count                : 1
+    locality                  : college
+    hour                      : 17
+
+  Parsed State:
+    availability              : medium
+    softness                  : hard
+    ph_state                  : acidic
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 1
+    locality                  : college
+
+  QUBO Cost Model (raw):
+    pump_off                  : 10.2
+    pump_on                   : 29.24
+    pump_softener             : 2.04
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 8.16
+    pump_on                   : 27.2
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── RUN SUMMARY ───────────────────────────────────
+  Tank 1    : pump_off
+  Tank 2    : pump_softener
+  Tank 3    : pump_softener
+
+DEBUG: Entering run 8
+
+====================================================
+  RUN 8 of 10
+====================================================
+
+──── TANK 1 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 80
+    tds_ppm                   : 492
+    ph                        : 8.85
+    turbidity                 : 50
+    tank_count                : 4
+    locality                  : house
+    hour                      : 17
+
+  Parsed State:
+    availability              : high
+    softness                  : hard
+    ph_state                  : alkaline
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 4
+    locality                  : house
+
+  QUBO Cost Model (raw):
+    pump_off                  : 7.2
+    pump_on                   : 38.16
+    pump_softener             : 0.36
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 6.84
+    pump_on                   : 37.8
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 2 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 60
+    tds_ppm                   : 269
+    ph                        : 6.26
+    turbidity                 : 10
+    tank_count                : 2
+    locality                  : complex
+    hour                      : 17
+
+  Parsed State:
+    availability              : medium
+    softness                  : moderate
+    ph_state                  : acidic
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 2
+    locality                  : complex
+
+  QUBO Cost Model (raw):
+    pump_off                  : 9.36
+    pump_on                   : 19.032
+    pump_softener             : 8.112
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 1.248
+    pump_on                   : 10.92
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 3 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 59
+    tds_ppm                   : 162
+    ph                        : 6.08
+    turbidity                 : 38
+    tank_count                : 5
+    locality                  : urban
+    hour                      : 17
+
+  Parsed State:
+    availability              : medium
+    softness                  : softened
+    ph_state                  : acidic
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 5
+    locality                  : urban
+
+  QUBO Cost Model (raw):
+    pump_off                  : 24.0
+    pump_on                   : 36.8
+    pump_softener             : 36.8
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 0.0
+    pump_on                   : 12.8
+    pump_softener             : 12.8
+
+  Optimal Action  : pump_off
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : OFF
+    softener                  : OFF
+    valve                     : BYPASS
+    lcd_msg                   : Pump OFF
+  [Logger] Decision logged.
+
+──── RUN SUMMARY ───────────────────────────────────
+  Tank 1    : pump_softener
+  Tank 2    : pump_softener
+  Tank 3    : pump_off
+
+DEBUG: Entering run 9
+
+====================================================
+  RUN 9 of 10
+====================================================
+
+──── TANK 1 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 64
+    tds_ppm                   : 296
+    ph                        : 6.42
+    turbidity                 : 21
+    tank_count                : 1
+    locality                  : urban
+    hour                      : 17
+
+  Parsed State:
+    availability              : medium
+    softness                  : moderate
+    ph_state                  : acidic
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 1
+    locality                  : urban
+
+  QUBO Cost Model (raw):
+    pump_off                  : 12.0
+    pump_on                   : 24.4
+    pump_softener             : 10.4
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 1.6
+    pump_on                   : 14.0
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 2 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 79
+    tds_ppm                   : 532
+    ph                        : 6.02
+    turbidity                 : 8
+    tank_count                : 1
+    locality                  : college
+    hour                      : 17
+
+  Parsed State:
+    availability              : high
+    softness                  : hard
+    ph_state                  : acidic
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 1
+    locality                  : college
+
+  QUBO Cost Model (raw):
+    pump_off                  : 6.8
+    pump_on                   : 37.74
+    pump_softener             : 2.04
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 4.76
+    pump_on                   : 35.7
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 3 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 55
+    tds_ppm                   : 153
+    ph                        : 7.34
+    turbidity                 : 33
+    tank_count                : 2
+    locality                  : complex
+    hour                      : 17
+
+  Parsed State:
+    availability              : medium
+    softness                  : softened
+    ph_state                  : neutral
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 2
+    locality                  : complex
+
+  QUBO Cost Model (raw):
+    pump_off                  : 9.36
+    pump_on                   : 9.672
+    pump_softener             : 11.232
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 0.0
+    pump_on                   : 0.312
+    pump_softener             : 1.872
+
+  Optimal Action  : pump_off
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : OFF
+    softener                  : OFF
+    valve                     : BYPASS
+    lcd_msg                   : Pump OFF
+  [Logger] Decision logged.
+
+──── RUN SUMMARY ───────────────────────────────────
+  Tank 1    : pump_softener
+  Tank 2    : pump_softener
+  Tank 3    : pump_off
+
+DEBUG: Entering run 10
+
+====================================================
+  RUN 10 of 10
+====================================================
+
+──── TANK 1 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 19
+    tds_ppm                   : 473
+    ph                        : 5.8
+    turbidity                 : 5
+    tank_count                : 4
+    locality                  : college
+    hour                      : 17
+
+  Parsed State:
+    availability              : low
+    softness                  : hard
+    ph_state                  : acidic
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 4
+    locality                  : college
+
+  QUBO Cost Model (raw):
+    pump_off                  : 48.96
+    pump_on                   : 43.452
+    pump_softener             : 3.672
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 45.288
+    pump_on                   : 39.78
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 2 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 66
+    tds_ppm                   : 475
+    ph                        : 8.88
+    turbidity                 : 7
+    tank_count                : 3
+    locality                  : complex
+    hour                      : 17
+
+  Parsed State:
+    availability              : medium
+    softness                  : hard
+    ph_state                  : alkaline
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 3
+    locality                  : complex
+
+  QUBO Cost Model (raw):
+    pump_off                  : 11.7
+    pump_on                   : 31.59
+    pump_softener             : 0.39
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 11.31
+    pump_on                   : 31.2
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── TANK 3 ────────────────────────────────────────
+  Sensor Readings:
+    water_level_percent       : 24
+    tds_ppm                   : 379
+    ph                        : 7.14
+    turbidity                 : 45
+    tank_count                : 3
+    locality                  : house
+    hour                      : 17
+
+  Parsed State:
+    availability              : low
+    softness                  : hard
+    ph_state                  : neutral
+    turbidity_state           : turbid
+    time_of_day               : normal
+    tank_count                : 3
+    locality                  : house
+
+  QUBO Cost Model (raw):
+    pump_off                  : 24.0
+    pump_on                   : 16.8
+    pump_softener             : -1.2
+
+  QUBO Cost Model (normalised):
+    pump_off                  : 25.2
+    pump_on                   : 18.0
+    pump_softener             : 0.0
+
+  Optimal Action  : pump_softener
+  Optimal Cost    : 0.0
+
+  Hardware Signals:
+    pump                      : ON
+    softener                  : ON
+    valve                     : SOFTENER_ROUTE
+    lcd_msg                   : Pumping via Softener
+  [Logger] Decision logged.
+
+──── RUN SUMMARY ───────────────────────────────────
+  Tank 1    : pump_softener
+  Tank 2    : pump_softener
+  Tank 3    : pump_softener
+
+====================================================
+  ALL RUNS COMPLETE
+  Results saved to: water_optimizer_log.csv
+====================================================

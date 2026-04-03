@@ -5,8 +5,8 @@ import dimod
 from config.config import (
     DEMAND_PROBABILITIES,
     SCENARIO_COST_TABLE,
-    TANK_DEMAND_MULTIPLIER,
     LOCALITY_MULTIPLIER,
+    get_tank_multiplier,
 )
 
 ACTION_VARS = {"pump_off": "x0", "pump_on": "x1", "pump_softener": "x2"}
@@ -19,7 +19,7 @@ def compute_expected_cost(action, time_of_day, scale):
 
 
 def build_qubo(state):
-    tank_scale   = TANK_DEMAND_MULTIPLIER.get(state["tank_count"], 1.0)
+    tank_scale   = get_tank_multiplier(state["tank_count"])
     locale_scale = LOCALITY_MULTIPLIER.get(state["locality"], 1.0)
     scale        = round(tank_scale * locale_scale, 4)
     time_of_day  = state["time_of_day"]
@@ -55,12 +55,10 @@ def build_qubo(state):
 
     raw_costs = {k: round(v, 4) for k, v in raw_costs.items()}
 
-    # Normalise so minimum = 0
     min_cost   = min(raw_costs.values())
     norm_costs = {k: round(v - min_cost, 4) for k, v in raw_costs.items()}
 
-    # Build dimod BQM
-    linear = {ACTION_VARS[a]: norm_costs[a] for a in ACTION_VARS}
+    linear  = {ACTION_VARS[a]: norm_costs[a] for a in ACTION_VARS}
     PENALTY = max(norm_costs.values()) * 3 + 10
     quadratic = {
         ("x0", "x1"): PENALTY * 2,
@@ -74,4 +72,4 @@ def build_qubo(state):
         linear, quadratic, offset=PENALTY, vartype=dimod.BINARY
     )
 
-    return raw_costs, norm_costs, bqm  
+    return raw_costs, norm_costs, bqm
