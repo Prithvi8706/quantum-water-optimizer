@@ -44,8 +44,8 @@ def optimize(payload: SensorPayload):
 
         return OptimizeResponse(
             action=action,
-            pump=hardware.get("pump", False),
-            softener=hardware.get("softener", False),
+            pump=hardware.get("pump") == "ON",
+            softener=hardware.get("softener") == "ON",
             energy=energy,
             state=state,
             raw_costs=raw_costs,

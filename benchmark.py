@@ -265,34 +265,34 @@ def chart_sensors(df):
     fig = plt.figure(figsize=(22, 16))
     fig.suptitle(
         "HOW EACH SENSOR AFFECTS THE DECISION COST\n"
-        "Understanding What Drives the Quantum-Inspired Controller",
+        "QI Controller vs Standard Controller — Side by Side",
         fontsize=20, fontweight="bold", color=C_TEXT, y=0.98,
     )
     gs = gridspec.GridSpec(2, 2, figure=fig, hspace=0.5, wspace=0.35)
 
     # ── 2A: TDS vs Cost ─────────────────────────────────────
     ax1 = fig.add_subplot(gs[0, 0])
-    sc = ax1.scatter(
-        df["tds"], df["qi_cost"],
-        c=df["tds"], cmap="YlOrRd", alpha=0.6, s=18, label="QI Cost"
-    )
     ax1.scatter(
         df["tds"], df["st_cost"],
-        color=C_ST, alpha=0.2, s=10, label="Standard Cost"
+        color=C_ST, alpha=0.5, s=18, label="Standard Controller", zorder=2
     )
-    plt.colorbar(sc, ax=ax1, label="TDS (ppm)")
-    ax1.axvline(120,  color=C_QI,    linestyle="--", linewidth=1.5,
+    ax1.scatter(
+        df["tds"], df["qi_cost"],
+        color=C_QI, alpha=0.5, s=18, label="Quantum-Inspired (QI)", zorder=3
+    )
+    ax1.axvline(120, color=C_QI,  linestyle="--", linewidth=1.5,
                 label="Soft limit (120 ppm)")
-    ax1.axvline(300,  color=C_WARN,  linestyle="--", linewidth=1.5,
+    ax1.axvline(300, color=C_WARN, linestyle="--", linewidth=1.5,
                 label="Hard water starts (300 ppm)")
-    ax1.axvline(600,  color=C_ST,    linestyle="--", linewidth=1.5,
+    ax1.axvline(600, color=C_ST,  linestyle="--", linewidth=1.5,
                 label="WHO max limit (600 ppm)")
     ax1.set_title(
         "TDS (Water Hardness) vs Penalty Cost\n"
-        "Higher TDS = Harder Water = More expensive to pump without softener",
+        "Green dots lower than red = QI makes cheaper decisions",
         fontsize=10, pad=8
     )
-    ax1.set_xlabel("TDS in ppm\n(50-120: Soft | 120-300: Moderate | 300+: Hard)", fontsize=8, color=C_SUB)
+    ax1.set_xlabel("TDS in ppm\n(50-120: Soft | 120-300: Moderate | 300+: Hard)",
+                   fontsize=8, color=C_SUB)
     ax1.set_ylabel("Penalty Cost (Weighted Risk Units)", fontsize=8, color=C_SUB)
     ax1.legend(fontsize=7)
     ax1.grid(True, linestyle="--", alpha=0.3)
@@ -300,23 +300,24 @@ def chart_sensors(df):
     # ── 2B: Water Level vs Cost ──────────────────────────────
     ax2 = fig.add_subplot(gs[0, 1])
     ax2.scatter(
-        df["level"], df["qi_cost"],
-        color=C_QI, alpha=0.5, s=18, label="QI Cost"
+        df["level"], df["st_cost"],
+        color=C_ST, alpha=0.5, s=18, label="Standard Controller", zorder=2
     )
     ax2.scatter(
-        df["level"], df["st_cost"],
-        color=C_ST, alpha=0.2, s=10, label="Standard Cost"
+        df["level"], df["qi_cost"],
+        color=C_QI, alpha=0.5, s=18, label="Quantum-Inspired (QI)", zorder=3
     )
     ax2.axvline(30, color=C_WARN, linestyle="--", linewidth=1.5,
                 label="Low Level Threshold (30%)")
     ax2.axvline(70, color=C_QI,  linestyle="--", linewidth=1.5,
                 label="High Level Threshold (70%)")
     ax2.set_title(
-        "WATER LEVEL (%) vs Penalty Cost\n"
-        "Low tank = urgent pump needed = high penalty for pump_off",
+        "Water Level (%) vs Penalty Cost\n"
+        "Green dots lower than red = QI makes cheaper decisions",
         fontsize=10, pad=8
     )
-    ax2.set_xlabel("Water Level (%)\n(0-30: LOW | 30-70: MEDIUM | 70-100: HIGH)", fontsize=8, color=C_SUB)
+    ax2.set_xlabel("Water Level (%)\n(0-30: LOW | 30-70: MEDIUM | 70-100: HIGH)",
+                   fontsize=8, color=C_SUB)
     ax2.set_ylabel("Penalty Cost (Weighted Risk Units)", fontsize=8, color=C_SUB)
     ax2.legend(fontsize=7)
     ax2.grid(True, linestyle="--", alpha=0.3)
@@ -324,24 +325,25 @@ def chart_sensors(df):
     # ── 2C: pH vs Cost ──────────────────────────────────────
     ax3 = fig.add_subplot(gs[1, 0])
     ax3.scatter(
-        df["ph"], df["qi_cost"],
-        color=C_QI, alpha=0.5, s=18, label="QI Cost"
+        df["ph"], df["st_cost"],
+        color=C_ST, alpha=0.5, s=18, label="Standard Controller", zorder=2
     )
     ax3.scatter(
-        df["ph"], df["st_cost"],
-        color=C_ST, alpha=0.2, s=10, label="Standard Cost"
+        df["ph"], df["qi_cost"],
+        color=C_QI, alpha=0.5, s=18, label="Quantum-Inspired (QI)", zorder=3
     )
-    ax3.axvline(6.5, color=C_ST,    linestyle="--", linewidth=1.5,
+    ax3.axvline(6.5, color=C_ST,  linestyle="--", linewidth=1.5,
                 label="Acidic threshold (pH < 6.5)")
-    ax3.axvline(7.5, color=C_WARN,  linestyle="--", linewidth=1.5,
+    ax3.axvline(7.5, color=C_WARN, linestyle="--", linewidth=1.5,
                 label="Alkaline threshold (pH > 7.5)")
-    ax3.axvspan(6.5, 7.5, alpha=0.08, color=C_QI, label="Safe Zone (pH 6.5 - 7.5)")
+    ax3.axvspan(6.5, 7.5, alpha=0.08, color=C_QI, label="Safe Zone (pH 6.5–7.5)")
     ax3.set_title(
-        "pH LEVEL vs Penalty Cost\n"
-        "Acidic or Alkaline water needs more treatment = higher cost",
+        "pH Level vs Penalty Cost\n"
+        "Green dots lower than red = QI makes cheaper decisions",
         fontsize=10, pad=8
     )
-    ax3.set_xlabel("pH Value\n(<6.5: Acidic | 6.5-7.5: Neutral/Safe | >7.5: Alkaline)", fontsize=8, color=C_SUB)
+    ax3.set_xlabel("pH Value\n(<6.5: Acidic | 6.5-7.5: Neutral/Safe | >7.5: Alkaline)",
+                   fontsize=8, color=C_SUB)
     ax3.set_ylabel("Penalty Cost (Weighted Risk Units)", fontsize=8, color=C_SUB)
     ax3.legend(fontsize=7)
     ax3.grid(True, linestyle="--", alpha=0.3)
@@ -349,25 +351,26 @@ def chart_sensors(df):
     # ── 2D: Turbidity vs Cost ────────────────────────────────
     ax4 = fig.add_subplot(gs[1, 1])
     ax4.scatter(
-        df["turbidity"], df["qi_cost"],
-        color=C_QI, alpha=0.5, s=18, label="QI Cost"
+        df["turbidity"], df["st_cost"],
+        color=C_ST, alpha=0.5, s=18, label="Standard Controller", zorder=2
     )
     ax4.scatter(
-        df["turbidity"], df["st_cost"],
-        color=C_ST, alpha=0.2, s=10, label="Standard Cost"
+        df["turbidity"], df["qi_cost"],
+        color=C_QI, alpha=0.5, s=18, label="Quantum-Inspired (QI)", zorder=3
     )
-    ax4.axvline(5,  color=C_QI,   linestyle="--", linewidth=1.5,
+    ax4.axvline(5,  color=C_QI,  linestyle="--", linewidth=1.5,
                 label="WHO Clear Limit (5 NTU)")
     ax4.axvline(30, color=C_WARN, linestyle="--", linewidth=1.5,
                 label="Turbid Warning (30 NTU)")
-    ax4.axvline(50, color=C_ST,   linestyle="--", linewidth=1.5,
+    ax4.axvline(50, color=C_ST,  linestyle="--", linewidth=1.5,
                 label="Severe (50 NTU)")
     ax4.set_title(
-        "TURBIDITY (NTU) vs Penalty Cost\n"
-        "Cloudy/dirty water = pump treatment needed = higher cost",
+        "Turbidity (NTU) vs Penalty Cost\n"
+        "Green dots lower than red = QI makes cheaper decisions",
         fontsize=10, pad=8
     )
-    ax4.set_xlabel("Turbidity in NTU\n(0-5: Clear | 5-30: Cloudy | 30+: Turbid)", fontsize=8, color=C_SUB)
+    ax4.set_xlabel("Turbidity in NTU\n(0-5: Clear | 5-30: Cloudy | 30+: Turbid)",
+                   fontsize=8, color=C_SUB)
     ax4.set_ylabel("Penalty Cost (Weighted Risk Units)", fontsize=8, color=C_SUB)
     ax4.legend(fontsize=7)
     ax4.grid(True, linestyle="--", alpha=0.3)

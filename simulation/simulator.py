@@ -1,8 +1,9 @@
 import random
 from datetime import datetime
+from typing import List, Optional
 
 
-def generate_fake_data(hour: int = None) -> dict:
+def generate_fake_data(hour: Optional[int] = None) -> dict:
     """
     Simulates sensor readings for one tank/location.
     If hour is None, uses current system hour.
@@ -24,7 +25,7 @@ def generate_fake_data(hour: int = None) -> dict:
     return data
 
 
-def generate_multi_tank_data(tank_count: int, hour: int = None) -> list[dict]:
+def generate_multi_tank_data(tank_count: int, hour: Optional[int] = None) -> List[dict]:
     """
     Generates independent sensor readings for each tank.
     """
