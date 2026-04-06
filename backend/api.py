@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from typing import Optional
 import sys, os
@@ -12,6 +13,10 @@ from logger import log_decision
 
 app = FastAPI(title="Quantum Water Optimizer API")
 
+@app.get("/", response_class=HTMLResponse)
+def dashboard():
+    with open(os.path.join(os.path.dirname(__file__), '..', 'dashboard.html'), 'r', encoding='utf-8') as f:
+        return f.read()
 
 class SensorPayload(BaseModel):
     water_level_percent: float
@@ -22,7 +27,6 @@ class SensorPayload(BaseModel):
     locality: str
     hour: Optional[int] = None
 
-
 class OptimizeResponse(BaseModel):
     action: str
     pump: bool
@@ -30,7 +34,6 @@ class OptimizeResponse(BaseModel):
     energy: float
     state: dict
     raw_costs: dict
-
 
 @app.post("/optimize", response_model=OptimizeResponse)
 def optimize(payload: SensorPayload):
@@ -41,7 +44,6 @@ def optimize(payload: SensorPayload):
         action, energy = solve_qubo(norm_costs, bqm=bqm, method="sa")
         hardware = translate_decision(action)
         log_decision("esp8266", data, state, raw_costs, action, energy, hardware)
-
         return OptimizeResponse(
             action=action,
             pump=hardware.get("pump") == "ON",
@@ -52,7 +54,6 @@ def optimize(payload: SensorPayload):
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
 
 @app.get("/health")
 def health():

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantum Water Optimizer</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f4f8; color: #1a202c; min-height: 100vh; }
+
+header { background: #0f4c81; color: white; padding: 1.2rem 2rem; display: flex; align-items: center; gap: 16px; }
+header .logo { width: 40px; height: 40px; background: #1d9e75; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+header .logo svg { width: 22px; height: 22px; fill: white; }
+header h1 { font-size: 20px; font-weight: 600; }
+header p { font-size: 13px; opacity: 0.8; margin-top: 2px; }
+.live-badge { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 13px; background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 20px; }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; }
+.live-dot.paused { background: #f59e0b; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+.section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: #64748b; text-transform: uppercase; margin-bottom: 12px; }
+
+.decision-banner { border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 20px; transition: background 0.4s; }
+.decision-banner.pump_off { background: #e0f2fe; border: 1.5px solid #7dd3fc; }
+.decision-banner.pump_on { background: #dcfce7; border: 1.5px solid #86efac; }
+.decision-banner.pump_softener { background: #fef9c3; border: 1.5px solid #fde047; }
+.decision-icon { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.pump_off .decision-icon { background: #bae6fd; }
+.pump_on .decision-icon { background: #bbf7d0; }
+.pump_softener .decision-icon { background: #fef08a; }
+.decision-icon svg { width: 28px; height: 28px; }
+.decision-title { font-size: 22px; font-weight: 700; color: #0f172a; }
+.decision-subtitle { font-size: 14px; color: #475569; margin-top: 4px; line-height: 1.5; }
+.decision-meta { margin-left: auto; text-align: right; }
+.decision-meta .cost-label { font-size: 12px; color: #64748b; }
+.decision-meta .cost-val { font-size: 20px; font-weight: 700; color: #0f172a; }
+
+.relay-row { display: flex; gap: 12px; margin-bottom: 2rem; }
+.relay-card { flex: 1; background: white; border-radius: 14px; border: 1.5px solid #e2e8f0; padding: 1.2rem 1.5rem; display: flex; align-items: center; gap: 14px; }
+.relay-indicator { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+.relay-indicator.on { background: #dcfce7; }
+.relay-indicator.off { background: #f1f5f9; }
+.relay-indicator svg { width: 22px; height: 22px; }
+.relay-indicator.on svg { stroke: #16a34a; }
+.relay-indicator.off svg { stroke: #94a3b8; }
+.relay-name { font-size: 15px; font-weight: 600; color: #0f172a; }
+.relay-status { font-size: 13px; margin-top: 2px; }
+.relay-status.on { color: #16a34a; font-weight: 500; }
+.relay-status.off { color: #94a3b8; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+
+.card { background: white; border-radius: 14px; border: 1.5px solid #e2e8f0; padding: 1.5rem; }
+.card h3 { font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+.card h3 svg { width: 18px; height: 18px; stroke: #64748b; flex-shrink: 0; }
+
+.sensor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.sensor-item { background: #f8fafc; border-radius: 10px; padding: 10px 14px; }
+.sensor-name { font-size: 11px; color: #64748b; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+.sensor-value { font-size: 20px; font-weight: 700; color: #0f172a; margin: 2px 0; }
+.sensor-unit { font-size: 11px; color: #94a3b8; }
+.sensor-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; margin-top: 4px; }
+.tag-good { background: #dcfce7; color: #166534; }
+.tag-warn { background: #fef9c3; color: #854d0e; }
+.tag-bad { background: #fee2e2; color: #991b1b; }
+
+.state-grid { display: flex; flex-direction: column; gap: 8px; }
+.state-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+.state-row:last-child { border-bottom: none; }
+.state-key { font-size: 13px; color: #64748b; }
+.state-pill { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+.pill-low, .pill-hard, .pill-acidic, .pill-alkaline, .pill-turbid, .pill-peak { background: #fee2e2; color: #991b1b; }
+.pill-medium, .pill-moderate, .pill-softened, .pill-normal { background: #fef9c3; color: #854d0e; }
+.pill-high, .pill-soft, .pill-neutral, .pill-clear, .pill-off_peak { background: #dcfce7; color: #166534; }
+
+.cost-bar-section { display: flex; flex-direction: column; gap: 10px; }
+.cost-row { display: flex; flex-direction: column; gap: 4px; }
+.cost-row-header { display: flex; justify-content: space-between; font-size: 13px; }
+.cost-action { color: #475569; font-weight: 500; }
+.cost-num { color: #0f172a; font-weight: 600; }
+.cost-bar-bg { height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
+.cost-bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+.bar-off { background: #94a3b8; }
+.bar-on { background: #3b82f6; }
+.bar-softener { background: #f59e0b; }
+.bar-best { background: #22c55e; }
+
+.history-list { display: flex; flex-direction: column; gap: 6px; max-height: 260px; overflow-y: auto; }
+.history-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #f8fafc; border-radius: 8px; font-size: 13px; }
+.history-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.dot-pump_off { background: #94a3b8; }
+.dot-pump_on { background: #3b82f6; }
+.dot-pump_softener { background: #f59e0b; }
+.history-action { font-weight: 600; color: #0f172a; flex: 1; }
+.history-time { color: #94a3b8; font-size: 12px; }
+.history-locality { color: #64748b; font-size: 12px; }
+
+.form-card { background: white; border-radius: 14px; border: 1.5px solid #e2e8f0; padding: 1.5rem; margin-bottom: 2rem; }
+.form-card h3 { font-size: 15px; font-weight: 600; color: #0f172a; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 8px; }
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 1.2rem; }
+.form-field label { display: block; font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+.form-field input, .form-field select { width: 100%; padding: 8px 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 14px; color: #0f172a; background: #f8fafc; outline: none; transition: border-color 0.2s; }
+.form-field input:focus, .form-field select:focus { border-color: #0f4c81; background: white; }
+.form-actions { display: flex; gap: 10px; align-items: center; }
+.btn-primary { background: #0f4c81; color: white; border: none; padding: 10px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+.btn-primary:hover { background: #1e40af; }
+.btn-secondary { background: white; color: #475569; border: 1.5px solid #e2e8f0; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
+.btn-secondary:hover { background: #f8fafc; }
+.sim-toggle { display: flex; align-items: center; gap: 8px; margin-left: auto; font-size: 13px; color: #475569; cursor: pointer; }
+.toggle-switch { width: 36px; height: 20px; background: #e2e8f0; border-radius: 10px; position: relative; cursor: pointer; transition: background 0.2s; }
+.toggle-switch.active { background: #0f4c81; }
+.toggle-knob { width: 16px; height: 16px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: left 0.2s; }
+.toggle-switch.active .toggle-knob { left: 18px; }
+
+.status-bar { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b; margin-top: 8px; }
+.spinner { width: 14px; height: 14px; border: 2px solid #e2e8f0; border-top-color: #0f4c81; border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.no-data { text-align: center; padding: 2rem; color: #94a3b8; font-size: 14px; }
+
+/* JSON paste panel */
+.json-toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #0f4c81; cursor: pointer; margin-bottom: 0; user-select: none; width: fit-content; }
+.json-toggle svg { width: 16px; height: 16px; stroke: #0f4c81; transition: transform 0.2s; }
+.json-toggle.open svg { transform: rotate(90deg); }
+.json-panel { display: none; margin-top: 12px; margin-bottom: 1.2rem; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 12px; }
+.json-panel.open { display: block; }
+.json-panel textarea { width: 100%; height: 160px; font-family: 'Courier New', monospace; font-size: 13px; color: #0f172a; background: white; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 10px 12px; outline: none; resize: vertical; transition: border-color 0.2s; }
+.json-panel textarea:focus { border-color: #0f4c81; }
+.json-panel-actions { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.json-error { font-size: 12px; color: #dc2626; margin-left: 4px; }
+.json-success { font-size: 12px; color: #16a34a; margin-left: 4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8 8 5 11 5 15a7 7 0 0014 0c0-4-3-7-7-13z"/></svg>
+  </div>
+  <div>
+    <h1>Quantum Water Optimizer</h1>
+    <p>Real-time intelligent water tank control &mdash; powered by quantum-inspired AI</p>
+  </div>
+  <div class="live-badge" id="live-badge">
+    <div class="live-dot paused" id="live-dot"></div>
+    <span id="live-label">Simulation paused</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="decision-banner pump_off" id="decision-banner">
+    <div class="decision-icon" id="decision-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0369a1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </div>
+    <div>
+      <div class="decision-title" id="decision-title">Waiting for data...</div>
+      <div class="decision-subtitle" id="decision-subtitle">Enter sensor values below or start the live simulation to see the optimizer in action.</div>
+    </div>
+    <div class="decision-meta">
+      <div class="cost-label">Optimizer cost score</div>
+      <div class="cost-val" id="decision-cost">&mdash;</div>
+    </div>
+  </div>
+
+  <div class="relay-row">
+    <div class="relay-card">
+      <div class="relay-indicator off" id="pump-indicator">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/><path d="M15.54 8.46a5 5 0 010 7.07M8.46 8.46a5 5 0 000 7.07"/></svg>
+      </div>
+      <div>
+        <div class="relay-name">Water pump</div>
+        <div class="relay-status off" id="pump-status">OFF &mdash; not running</div>
+      </div>
+    </div>
+    <div class="relay-card">
+      <div class="relay-indicator off" id="softener-indicator">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="5"/></svg>
+      </div>
+      <div>
+        <div class="relay-name">Water softener</div>
+        <div class="relay-status off" id="softener-status">OFF &mdash; not active</div>
+      </div>
+    </div>
+    <div class="relay-card">
+      <div class="relay-indicator off" id="valve-indicator">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2"/><path d="M12 7v10M7 12h10"/></svg>
+      </div>
+      <div>
+        <div class="relay-name">Valve route</div>
+        <div class="relay-status off" id="valve-status">Bypass mode</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <h3>
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      Enter sensor readings manually
+    </h3>
+    <div class="form-grid">
+      <div class="form-field">
+        <label>Water level (%)</label>
+        <input type="number" id="f-level" value="28" min="0" max="100" placeholder="0-100">
+      </div>
+      <div class="form-field">
+        <label>TDS &mdash; hardness (ppm)</label>
+        <input type="number" id="f-tds" value="510" min="0" max="2000" placeholder="ppm">
+      </div>
+      <div class="form-field">
+        <label>pH level</label>
+        <input type="number" id="f-ph" value="6.4" min="0" max="14" step="0.1" placeholder="0-14">
+      </div>
+      <div class="form-field">
+        <label>Turbidity (NTU)</label>
+        <input type="number" id="f-turbidity" value="4.7" min="0" max="100" step="0.1" placeholder="NTU">
+      </div>
+      <div class="form-field">
+        <label>Number of tanks</label>
+        <input type="number" id="f-tanks" value="3" min="1" max="10" placeholder="count">
+      </div>
+      <div class="form-field">
+        <label>Location type</label>
+        <select id="f-locality">
+          <option value="house">House</option>
+          <option value="complex">Residential complex</option>
+          <option value="college" selected>College</option>
+          <option value="urban">Urban area</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- JSON paste panel -->
+    <div class="json-toggle" id="json-toggle" onclick="toggleJsonPanel()">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      Paste JSON instead
+    </div>
+    <div class="json-panel" id="json-panel">
+      <textarea id="json-input" placeholder='{"water_level_percent": 28.0, "tds_ppm": 510, "ph": 6.4, "turbidity": 4.7, "tank_count": 3, "locality": "college", "hour": 10}'></textarea>
+      <div class="json-panel-actions">
+        <button class="btn-primary" onclick="loadJson()">Load JSON</button>
+        <button class="btn-secondary" onclick="clearJson()">Clear</button>
+        <span id="json-feedback"></span>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn-primary" onclick="runManual()">Run optimizer</button>
+      <button class="btn-secondary" onclick="fillRandom()">Random values</button>
+      <label class="sim-toggle" onclick="toggleSim()">
+        <span>Live simulation</span>
+        <div class="toggle-switch" id="sim-toggle"></div>
+      </label>
+    </div>
+    <div class="status-bar" id="status-bar" style="display:none;">
+      <div class="spinner"></div>
+      <span id="status-text">Running optimizer...</span>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Live sensor readings
+      </h3>
+      <div class="sensor-grid" id="sensor-grid">
+        <div class="no-data" style="grid-column:span 2">No readings yet</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Water system state
+      </h3>
+      <div class="state-grid" id="state-grid">
+        <div class="no-data">No state yet</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Cost comparison (all 3 options)
+      </h3>
+      <div class="cost-bar-section" id="cost-bars">
+        <div class="no-data">Run optimizer to see costs</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Decision history
+      </h3>
+      <div class="history-list" id="history-list">
+        <div class="no-data">No decisions yet</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var simRunning = false;
+var simTimer = null;
+var history = [];
+
+var actionLabels = {
+  pump_off: 'Keep pump OFF \u2014 water level is fine',
+  pump_on: 'Turn pump ON \u2014 water needs refilling',
+  pump_softener: 'Pump ON with softener \u2014 water is too hard'
+};
+
+var actionTitles = {
+  pump_off: 'Pump OFF (conserve)',
+  pump_on: 'Pump ON (normal)',
+  pump_softener: 'Pump + Softener (treat water)'
+};
+
+function toggleJsonPanel() {
+  var toggle = document.getElementById('json-toggle');
+  var panel = document.getElementById('json-panel');
+  var isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open', !isOpen);
+  toggle.classList.toggle('open', !isOpen);
+}
+
+function loadJson() {
+  var raw = document.getElementById('json-input').value.trim();
+  var feedback = document.getElementById('json-feedback');
+  if (!raw) {
+    feedback.className = 'json-error';
+    feedback.textContent = 'Paste some JSON first.';
+    return;
+  }
+  try {
+    var d = JSON.parse(raw);
+    if (d.water_level_percent !== undefined) document.getElementById('f-level').value = d.water_level_percent;
+    if (d.tds_ppm !== undefined) document.getElementById('f-tds').value = d.tds_ppm;
+    if (d.ph !== undefined) document.getElementById('f-ph').value = d.ph;
+    if (d.turbidity !== undefined) document.getElementById('f-turbidity').value = d.turbidity;
+    if (d.tank_count !== undefined) document.getElementById('f-tanks').value = d.tank_count;
+    if (d.locality !== undefined) document.getElementById('f-locality').value = d.locality;
+    feedback.className = 'json-success';
+    feedback.textContent = 'Fields filled! Click Run optimizer.';
+  } catch (e) {
+    feedback.className = 'json-error';
+    feedback.textContent = 'Invalid JSON: ' + e.message;
+  }
+}
+
+function clearJson() {
+  document.getElementById('json-input').value = '';
+  document.getElementById('json-feedback').textContent = '';
+}
+
+function sensorTag(key, val) {
+  if (key === 'level') {
+    if (val < 30) return ['tag-bad', 'Critical'];
+    if (val < 70) return ['tag-warn', 'Medium'];
+    return ['tag-good', 'Good'];
+  }
+  if (key === 'tds') {
+    if (val < 120) return ['tag-good', 'Soft'];
+    if (val < 300) return ['tag-warn', 'Moderate'];
+    return ['tag-bad', 'Hard'];
+  }
+  if (key === 'ph') {
+    if (val < 6.5 || val > 7.5) return ['tag-bad', 'Out of range'];
+    return ['tag-good', 'Normal'];
+  }
+  if (key === 'turbidity') {
+    if (val < 5) return ['tag-good', 'Clear'];
+    return ['tag-bad', 'Turbid'];
+  }
+  return ['tag-warn', ''];
+}
+
+function updateBanner(action, energy) {
+  var banner = document.getElementById('decision-banner');
+  var icon = document.getElementById('decision-icon');
+  var title = document.getElementById('decision-title');
+  var subtitle = document.getElementById('decision-subtitle');
+  var cost = document.getElementById('decision-cost');
+  banner.className = 'decision-banner ' + action;
+  title.textContent = actionTitles[action] || action;
+  subtitle.textContent = actionLabels[action] || '';
+  cost.textContent = parseFloat(energy).toFixed(2);
+
+  var icons = {
+    pump_off: '<svg viewBox="0 0 24 24" fill="none" stroke="#0369a1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.364 5.636a9 9 0 11-12.728 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>',
+    pump_on: '<svg viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 8 5 11 5 15a7 7 0 0014 0c0-4-3-7-7-13z"/></svg>',
+    pump_softener: '<svg viewBox="0 0 24 24" fill="none" stroke="#a16207" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 8 5 11 5 15a7 7 0 0014 0c0-4-3-7-7-13z"/><path d="M9 15a3 3 0 006 0"/></svg>'
+  };
+  icon.innerHTML = icons[action] || icons.pump_off;
+}
+
+function updateRelays(pump, softener, valve) {
+  var pi = document.getElementById('pump-indicator');
+  var ps = document.getElementById('pump-status');
+  var si = document.getElementById('softener-indicator');
+  var ss = document.getElementById('softener-status');
+  var vi = document.getElementById('valve-indicator');
+  var vs = document.getElementById('valve-status');
+
+  pi.className = 'relay-indicator ' + (pump ? 'on' : 'off');
+  ps.className = 'relay-status ' + (pump ? 'on' : 'off');
+  ps.textContent = pump ? 'ON \u2014 actively pumping water' : 'OFF \u2014 not running';
+
+  si.className = 'relay-indicator ' + (softener ? 'on' : 'off');
+  ss.className = 'relay-status ' + (softener ? 'on' : 'off');
+  ss.textContent = softener ? 'ON \u2014 treating hard water' : 'OFF \u2014 not active';
+
+  var valveOn = valve === 'SOFTENER_ROUTE';
+  vi.className = 'relay-indicator ' + (valveOn ? 'on' : 'off');
+  vs.className = 'relay-status ' + (valveOn ? 'on' : 'off');
+  vs.textContent = valveOn ? 'Softener route \u2014 water being treated' : 'Bypass mode \u2014 direct flow';
+}
+
+function updateSensors(data) {
+  var g = document.getElementById('sensor-grid');
+  var sensors = [
+    { key: 'level', name: 'Water level', val: data.water_level_percent.toFixed(1), unit: '%' },
+    { key: 'tds', name: 'Hardness (TDS)', val: data.tds_ppm.toFixed(0), unit: 'ppm' },
+    { key: 'ph', name: 'pH level', val: data.ph.toFixed(2), unit: '' },
+    { key: 'turbidity', name: 'Turbidity', val: data.turbidity.toFixed(1), unit: 'NTU' }
+  ];
+  g.innerHTML = sensors.map(function(s) {
+    var tag = sensorTag(s.key, parseFloat(s.val));
+    return '<div class="sensor-item"><div class="sensor-name">' + s.name + '</div>' +
+      '<div class="sensor-value">' + s.val + '<span class="sensor-unit"> ' + s.unit + '</span></div>' +
+      '<span class="sensor-tag ' + tag[0] + '">' + tag[1] + '</span></div>';
+  }).join('');
+}
+
+function updateState(state) {
+  var g = document.getElementById('state-grid');
+  var labels = {
+    availability: 'Water availability',
+    softness: 'Water softness',
+    ph_state: 'pH condition',
+    turbidity_state: 'Water clarity',
+    time_of_day: 'Demand period',
+    locality: 'Location type',
+    tank_count: 'Tanks'
+  };
+  g.innerHTML = Object.keys(state).map(function(k) {
+    var v = String(state[k]);
+    return '<div class="state-row"><span class="state-key">' + (labels[k] || k) + '</span>' +
+      '<span class="state-pill pill-' + v + '">' + v + '</span></div>';
+  }).join('');
+}
+
+function updateCosts(rawCosts, bestAction) {
+  var vals = Object.values(rawCosts);
+  var maxVal = Math.max.apply(null, vals.map(Math.abs)) || 1;
+  var actions = ['pump_off', 'pump_on', 'pump_softener'];
+  var names = { pump_off: 'Pump OFF', pump_on: 'Pump ON', pump_softener: 'Pump + Softener' };
+  var barClass = { pump_off: 'bar-off', pump_on: 'bar-on', pump_softener: 'bar-softener' };
+
+  document.getElementById('cost-bars').innerHTML = actions.map(function(a) {
+    var v = rawCosts[a] || 0;
+    var pct = Math.min(Math.abs(v) / maxVal * 100, 100).toFixed(1);
+    var isBest = a === bestAction;
+    var fillClass = isBest ? 'bar-best' : barClass[a];
+    return '<div class="cost-row">' +
+      '<div class="cost-row-header"><span class="cost-action">' + names[a] + (isBest ? ' \u2713 chosen' : '') + '</span>' +
+      '<span class="cost-num">' + parseFloat(v).toFixed(2) + '</span></div>' +
+      '<div class="cost-bar-bg"><div class="cost-bar-fill ' + fillClass + '" style="width:' + pct + '%"></div></div>' +
+      '</div>';
+  }).join('');
+}
+
+function addHistory(action, data) {
+  var now = new Date();
+  var time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0') + ':' + now.getSeconds().toString().padStart(2,'0');
+  history.unshift({ action: action, time: time, locality: data.locality, level: data.water_level_percent });
+  if (history.length > 20) history.pop();
+
+  var names = { pump_off: 'Pump OFF', pump_on: 'Pump ON', pump_softener: 'Pump + Softener' };
+  var el = document.getElementById('history-list');
+  el.innerHTML = history.map(function(h) {
+    return '<div class="history-item">' +
+      '<div class="history-dot dot-' + h.action + '"></div>' +
+      '<span class="history-action">' + (names[h.action] || h.action) + '</span>' +
+      '<span class="history-locality">' + h.locality + ' \u00b7 ' + h.level.toFixed(0) + '%</span>' +
+      '<span class="history-time">' + h.time + '</span></div>';
+  }).join('');
+}
+
+function showStatus(msg) {
+  document.getElementById('status-bar').style.display = 'flex';
+  document.getElementById('status-text').textContent = msg;
+}
+function hideStatus() {
+  document.getElementById('status-bar').style.display = 'none';
+}
+
+function applyResult(result, inputData) {
+  updateBanner(result.action, result.energy);
+  updateRelays(result.pump, result.softener, result.state.valve || 'BYPASS');
+  updateSensors(inputData);
+  updateState(result.state);
+  updateCosts(result.raw_costs, result.action);
+  addHistory(result.action, inputData);
+}
+
+function runManual() {
+  var data = {
+    water_level_percent: parseFloat(document.getElementById('f-level').value),
+    tds_ppm: parseFloat(document.getElementById('f-tds').value),
+    ph: parseFloat(document.getElementById('f-ph').value),
+    turbidity: parseFloat(document.getElementById('f-turbidity').value),
+    tank_count: parseInt(document.getElementById('f-tanks').value),
+    locality: document.getElementById('f-locality').value
+  };
+  showStatus('Running quantum optimizer...');
+  fetch('/optimize', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(function(r) { return r.json(); }).then(function(result) {
+    hideStatus();
+    applyResult(result, data);
+  }).catch(function(e) {
+    hideStatus();
+    showStatus('Error: ' + e.message);
+  });
+}
+
+function fillRandom() {
+  var localities = ['house', 'complex', 'college', 'urban'];
+  document.getElementById('f-level').value = Math.floor(Math.random() * 90) + 5;
+  document.getElementById('f-tds').value = Math.floor(Math.random() * 1800) + 50;
+  document.getElementById('f-ph').value = (Math.random() * 5 + 4).toFixed(1);
+  document.getElementById('f-turbidity').value = (Math.random() * 45 + 1).toFixed(1);
+  document.getElementById('f-tanks').value = Math.floor(Math.random() * 5) + 1;
+  document.getElementById('f-locality').value = localities[Math.floor(Math.random() * 4)];
+}
+
+function randomPayload() {
+  var localities = ['house', 'complex', 'college', 'urban'];
+  return {
+    water_level_percent: Math.floor(Math.random() * 90) + 5,
+    tds_ppm: Math.floor(Math.random() * 1800) + 50,
+    ph: parseFloat((Math.random() * 5 + 4).toFixed(2)),
+    turbidity: parseFloat((Math.random() * 45 + 1).toFixed(1)),
+    tank_count: Math.floor(Math.random() * 5) + 1,
+    locality: localities[Math.floor(Math.random() * 4)],
+    hour: new Date().getHours()
+  };
+}
+
+function runSim() {
+  var data = randomPayload();
+  fetch('/optimize', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(function(r) { return r.json(); }).then(function(result) {
+    applyResult(result, data);
+    document.getElementById('f-level').value = data.water_level_percent;
+    document.getElementById('f-tds').value = data.tds_ppm;
+    document.getElementById('f-ph').value = data.ph;
+    document.getElementById('f-turbidity').value = data.turbidity;
+    document.getElementById('f-tanks').value = data.tank_count;
+    document.getElementById('f-locality').value = data.locality;
+  }).catch(function() {});
+}
+
+function toggleSim() {
+  simRunning = !simRunning;
+  var toggle = document.getElementById('sim-toggle');
+  var dot = document.getElementById('live-dot');
+  var label = document.getElementById('live-label');
+  toggle.className = 'toggle-switch ' + (simRunning ? 'active' : '');
+  dot.className = 'live-dot ' + (simRunning ? '' : 'paused');
+  label.textContent = simRunning ? 'Simulation running' : 'Simulation paused';
+  if (simRunning) {
+    runSim();
+    simTimer = setInterval(runSim, 3000);
+  } else {
+    clearInterval(simTimer);
+  }
+}
+</script>
+</body>
+</html>
