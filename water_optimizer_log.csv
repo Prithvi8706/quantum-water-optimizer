@@ -32,3 +32,5 @@ timestamp,tank_id,water_level_percent,tds_ppm,ph,turbidity,tank_count,locality,h
 2026-04-06 14:19:24,esp8266,28.0,510.0,6.4,4.7,3,college,9,low,hard,acidic,clear,peak,53.04,22.95,-5.1,pump_softener,0.0,ON,ON,SOFTENER_ROUTE
 2026-04-06 16:38:11,esp8266,28.0,510.0,6.4,4.7,3,college,9,low,hard,acidic,clear,peak,53.04,22.95,-5.1,pump_softener,0.0,ON,ON,SOFTENER_ROUTE
 2026-04-06 23:05:03,esp8266,28.0,510.0,6.4,4.7,3,college,,low,hard,acidic,clear,normal,40.8,26.01,-2.04,pump_softener,0.0,ON,ON,SOFTENER_ROUTE
+2026-04-08 11:22:31,esp8266,28.0,510.0,6.4,4.7,3,college,,low,hard,acidic,clear,normal,40.8,26.01,-2.04,pump_softener,0.0,ON,ON,SOFTENER_ROUTE
+2026-04-08 11:24:17,esp8266,88.0,95.0,7.1,1.2,1,house,,high,soft,neutral,clear,normal,4.0,7.2,3.2,pump_softener,0.0,ON,ON,SOFTENER_ROUTE

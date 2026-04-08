@@ -119,7 +119,6 @@ header p { font-size: 13px; opacity: 0.8; margin-top: 2px; }
 
 .no-data { text-align: center; padding: 2rem; color: #94a3b8; font-size: 14px; }
 
-/* JSON paste panel */
 .json-toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #0f4c81; cursor: pointer; margin-bottom: 0; user-select: none; width: fit-content; }
 .json-toggle svg { width: 16px; height: 16px; stroke: #0f4c81; transition: transform 0.2s; }
 .json-toggle.open svg { transform: rotate(90deg); }
@@ -231,7 +230,6 @@ header p { font-size: 13px; opacity: 0.8; margin-top: 2px; }
       </div>
     </div>
 
-    <!-- JSON paste panel -->
     <div class="json-toggle" id="json-toggle" onclick="toggleJsonPanel()">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       Paste JSON instead
@@ -306,7 +304,7 @@ header p { font-size: 13px; opacity: 0.8; margin-top: 2px; }
 <script>
 var simRunning = false;
 var simTimer = null;
-var history = [];
+var decisionLog = [];
 
 var actionLabels = {
   pump_off: 'Keep pump OFF \u2014 water level is fine',
@@ -477,12 +475,12 @@ function updateCosts(rawCosts, bestAction) {
 function addHistory(action, data) {
   var now = new Date();
   var time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0') + ':' + now.getSeconds().toString().padStart(2,'0');
-  history.unshift({ action: action, time: time, locality: data.locality, level: data.water_level_percent });
-  if (history.length > 20) history.pop();
+  decisionLog.unshift({ action: action, time: time, locality: data.locality, level: data.water_level_percent });
+  if (decisionLog.length > 20) decisionLog.pop();
 
   var names = { pump_off: 'Pump OFF', pump_on: 'Pump ON', pump_softener: 'Pump + Softener' };
   var el = document.getElementById('history-list');
-  el.innerHTML = history.map(function(h) {
+  el.innerHTML = decisionLog.map(function(h) {
     return '<div class="history-item">' +
       '<div class="history-dot dot-' + h.action + '"></div>' +
       '<span class="history-action">' + (names[h.action] || h.action) + '</span>' +
