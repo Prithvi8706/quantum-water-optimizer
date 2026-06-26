@@ -5,5 +5,18 @@ __pycache__/
 .env
 venv/
 .venv/
+env/
 .vscode/
+.idea/
 .DS_Store
+Thumbs.db
+
+# Logs and local output
+*.log
+
+# Python packaging / test artifacts
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.coverage
