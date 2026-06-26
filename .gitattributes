@@ -1,0 +1,17 @@
+# Normalize line endings to LF on commit, keep native on checkout
+* text=auto
+
+# Explicit text files
+*.py    text
+*.md    text
+*.txt   text
+*.csv   text
+*.html  text
+*.json  text
+
+# Binary files - never normalize
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
