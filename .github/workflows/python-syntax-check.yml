@@ -1,0 +1,25 @@
+name: Python Syntax Check
+
+# Lightweight CI: only verifies that all Python files compile.
+# It does not install dependencies or run the project, so it stays fast
+# and does not affect runtime behavior.
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Compile all Python sources
+        run: python -m compileall -q .
