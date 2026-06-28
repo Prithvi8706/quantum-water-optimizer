@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Quantum Water Optimizer"
+abstract: >-
+  A quantum-assisted optimization system for water distribution and usage,
+  using QUBO formulations solved on D-Wave quantum annealers.
+authors:
+  - family-names: Prithvi
+    alias: Prithvi8706
+repository-code: "https://github.com/Prithvi8706/quantum-water-optimizer"
+license: MIT
+keywords:
+  - quantum-computing
+  - optimization
+  - qubo
+  - water-management
+  - dwave
