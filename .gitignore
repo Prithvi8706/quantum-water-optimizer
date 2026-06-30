@@ -20,3 +20,9 @@ dist/
 *.egg-info/
 .pytest_cache/
 .coverage
+
+# Editor swap and backup files
+*.swp
+*.swo
+*~
+*.bak
