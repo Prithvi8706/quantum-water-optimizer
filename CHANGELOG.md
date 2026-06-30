@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `.gitattributes` for consistent line-ending normalization.
 - Project meta files: changelog, code of conduct, security policy, and
   GitHub issue/PR templates.
+- `.dockerignore` to keep caches and local files out of the build context.
 
 ### Changed
 - Expanded `.gitignore` to cover logs, IDE folders, and packaging artifacts.
+- Extended `.gitignore` with editor swap and backup file patterns.
