@@ -32,6 +32,7 @@ HEADERS = [
 
 
 def init_log():
+    # overwrites existing log on each run
     with open(LOG_FILE, mode="w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=HEADERS)
         writer.writeheader()
