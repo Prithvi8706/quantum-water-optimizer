@@ -56,4 +56,5 @@ LOCALITY_MULTIPLIER = {
 def get_tank_multiplier(count):
     if count <= 5:
         return TANK_DEMAND_MULTIPLIER[count]
+    # linear extrapolation beyond 5 tanks
     return 2.0 + (count - 5) * 0.2
