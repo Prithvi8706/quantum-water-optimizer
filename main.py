@@ -1,5 +1,5 @@
 import sys
-sys.stdout.reconfigure(encoding='utf-8')
+sys.stdout.reconfigure(encoding='utf-8')  # ensure unicode output on Windows
 import os
 
 sys.path.insert(0, os.path.dirname(__file__))
