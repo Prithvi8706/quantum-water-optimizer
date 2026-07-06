@@ -1,7 +1,5 @@
 def translate_decision(action: str) -> dict:
-    """
-    Maps optimizer action to physical relay/valve control signals.
-    """
+    """Maps optimizer action to physical relay/valve control signals."""
     signals = {
         "pump_off": {
             "pump":     "OFF",
