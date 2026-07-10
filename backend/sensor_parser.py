@@ -14,6 +14,7 @@ from config.config import (
 
 
 def classify_time_of_day(hour: int) -> str:
+    """Returns peak, off_peak, or normal based on hour of day."""
     if hour in PEAK_HOURS:
         return "peak"
     elif hour in OFF_PEAK_HOURS:
